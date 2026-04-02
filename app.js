@@ -43,11 +43,11 @@ app.get("/v1/senai/dados/estado/:uf", function(request, response){ //enviando os
 
     //realizando tratamento de erro 
     if(estado){ //se a função retornar algo ela vai cair aqui
-        response.json(estado) //enviando váriavel que foi criada
         response.status(200)  //enviando código
+        response.json(estado) //enviando váriavel que foi criada
     }else{ //se a função retornar "false" ela vai cair aqui
-        response.json({"message": "O estado informado não foi encontrado!"})
         response.status(404)
+        response.json({"message": "O estado informado não foi encontrado!"})
     }
     
 })
@@ -59,11 +59,11 @@ app.get("/v1/senai/capital/estado/:uf", function(request, response){
 
     //tratativa de erros
     if(capitalEstados){
-        response.json(capitalEstados)
         response.status(200)
+        response.json(capitalEstados)
     }else{
-        response.json({"message": "O estado informado não foi encontrado!"})
         response.status(404)
+        response.json({"message": "O estado informado não foi encontrado!"})
     }
 
 })
@@ -72,8 +72,8 @@ app.get("/v1/senai/capital/estado/:uf", function(request, response){
 app.get("/v1/senai/estados/capital/brasil", function(request, response){
     let capitaisBrasil = estadosCidades.getCapitalPais()
 
-    response.json(capitaisBrasil)
     response.status(200)
+    response.json(capitaisBrasil)
 })
 
 //retorna dados dos estados filtrando pela região
@@ -83,11 +83,11 @@ app.get("/v1/senai/estados/regiao/:nomeRegiao", function(request, response){
 
     //tratativa de erros
     if(estadosRegiao){
-        response.json(estadosRegiao)
         response.status(200)
+        response.json(estadosRegiao)
     }else{
-        response.json({"message": "Região não encontrada!"})
         response.status(404)
+        response.json({"message": "Região não encontrada!"})
     }
 
 })
@@ -98,11 +98,11 @@ app.get("/v1/senai/cidades/estado/:uf", function(request, response){
     let cidadesEstado = estadosCidades.getCidades(uf)
 
     if(cidadesEstado){
-        response.json(cidadesEstado)
         response.status(200)
+        response.json(cidadesEstado)
     }else{
-        response.json({"message": "Estado não encontrado!"})
         response.status(404)
+        response.json({"message": "Estado não encontrado!"})
     }
 })
 
@@ -112,9 +112,54 @@ app.get("/v1/senai/estados", function(request, response){
     //criando variável para guardar a função específica do arquivo
     let estados = estadosCidades.getListaDeEstados()
 
-    response.json(estados) //enviando váriavel que foi criada
     response.status(200)   //enviando código
+    response.json(estados) //enviando váriavel que foi criada
 
+})
+
+app.get("/v1/senai/help", function(request, response){
+    let docAPI = {
+        "API-description": "API para manipular dados de Estados e Cidades",
+        "date": "2026-04-02",
+        "Development": "Lucas Kolle",
+        "email": "lucaskolle2020@gmail.com",
+        "Version": "1.0",
+        "endPoints": [
+            {
+                "id": 1,
+                "Rota 1": "/v1/senai/estados",
+                "Description": "Retorna a lista de todos os estados do Brasil"
+            },
+            {
+                "id": 2,
+                "Rota 2": "/v1/senai/dados/estado/sp",
+                "Description": "Retorna os dados do estados filtrando pela sigla do estado" 
+            },
+            {
+                "id": 3,
+                "Rota 2": "/v1/senai/capital/estado/:rj",
+                "Description": "Retorna os dados da capital filtrando pela sigla do estado" 
+            },
+            {
+                "id": 4,
+                "Rota 2": "/v1/senai/estados/capital/brasil",
+                "Description": "Retorna todos os estados que formaram capital do Brasil" 
+            },
+            {
+                "id": 5,
+                "Rota 2": "/v1/senai/estados/regiao/nordeste",
+                "Description": "Retorna todos os estados que pertencem à está região" 
+            },
+            {
+                "id": 6,
+                "Rota 2": "/v1/senai/cidades/estado/sc",
+                "Description": "Retorna todas as cidades do estado"
+            }
+        ]
+    }
+
+    response.status(200)
+    response.json(docAPI)
 })
 
 //serve para inicalizar a API para receber requisições
