@@ -37,6 +37,76 @@ const estadosCidades = require("./modulo/functions.js")
 //Request  -> Chegadas de dados da API
 
 //criando endPoints para a API
+app.get("/v1/senai/dados/estado/:uf", function(request, response){ //enviando os parametros por meio da url usando o ":nome da variavel"
+    let sigla = request.params.uf //criando variável para guardar os parametros digitados na url ":nome da variável / parametros"
+    let estado = estadosCidades.getDadosEstado(sigla) //criando variável para guardar o resultado da função e mandando a sigla
+
+    //realizando tratamento de erro 
+    if(estado){ //se a função retornar algo ela vai cair aqui
+        response.json(estado) //enviando váriavel que foi criada
+        response.status(200)  //enviando código
+    }else{ //se a função retornar "false" ela vai cair aqui
+        response.json({"message": "O estado informado não foi encontrado!"})
+        response.status(404)
+    }
+    
+})
+
+//retorna dados da capital de cada estado filtrando pelo "uf"
+app.get("/v1/senai/capital/estado/:uf", function(request, response){
+    let sigla = request.params.uf //criando variável para receber o estado digitado na url
+    let capitalEstados = estadosCidades.getCapitalEstado(sigla) //criando variável para guardar o resultado da função e mandando a sigla
+
+    //tratativa de erros
+    if(capitalEstados){
+        response.json(capitalEstados)
+        response.status(200)
+    }else{
+        response.json({"message": "O estado informado não foi encontrado!"})
+        response.status(404)
+    }
+
+})
+
+//retorna dados dos estados que foram capitais do Brasil, não tem filtragem
+app.get("/v1/senai/estados/capital/brasil", function(request, response){
+    let capitaisBrasil = estadosCidades.getCapitalPais()
+
+    response.json(capitaisBrasil)
+    response.status(200)
+})
+
+//retorna dados dos estados filtrando pela região
+app.get("/v1/senai/estados/regiao/:nomeRegiao", function(request, response){
+    let regiao = request.params.nomeRegiao
+    let estadosRegiao = estadosCidades.getEstadosRegiao(regiao)
+
+    //tratativa de erros
+    if(estadosRegiao){
+        response.json(estadosRegiao)
+        response.status(200)
+    }else{
+        response.json({"message": "Região não encontrada!"})
+        response.status(404)
+    }
+
+})
+
+//retorna dados das cidades filtrando pelo "uf"
+app.get("/v1/senai/cidades/estado/:uf", function(request, response){
+    let uf = request.params.uf
+    let cidadesEstado = estadosCidades.getCidades(uf)
+
+    if(cidadesEstado){
+        response.json(cidadesEstado)
+        response.status(200)
+    }else{
+        response.json({"message": "Estado não encontrado!"})
+        response.status(404)
+    }
+})
+
+//retorna os estados do Brasil,não tem filtragem
 app.get("/v1/senai/estados", function(request, response){
 
     //criando variável para guardar a função específica do arquivo
@@ -45,20 +115,6 @@ app.get("/v1/senai/estados", function(request, response){
     response.json(estados) //enviando váriavel que foi criada
     response.status(200)   //enviando código
 
-})
-
-//enviando os parametros por meio da url usando o ":nome da variavel"
-app.get("/v1/senai/dados/estado/:uf", function(request, response){
-    let sigla = request.params.uf //criando variável para guardar os parametros digitados na url ":nome da variável / parametros"
-    let estado = estadosCidades.getDadosEstado(sigla) //criando variável para guardar o resultado da função e mandando a sigla
-
-    response.json(estado) //enviando váriavel que foi criada
-    response.status(200)  //enviando código
-})
-
-app.get("/cidades", function(request, response){
-    response.json({"message": "Testando minha API de cidades"})
-    response.status(200)
 })
 
 //serve para inicalizar a API para receber requisições
