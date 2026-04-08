@@ -53,8 +53,9 @@ app.get("/v1/senai/dados/estado/:uf", function(request, response){ //enviando os
 })
 
 //retorna dados da capital de cada estado filtrando pelo "uf"
-app.get("/v1/senai/capital/estado/:uf", function(request, response){
-    let sigla = request.params.uf //criando variável para receber o estado digitado na url
+     // "/v1/senai/capital/estado/:uf" via params, é necessário adicionar manualmente na url
+app.get("/v1/senai/capital/estado/", function(request, response){ // no modelo query não é necessário adicionar a variável após o ponto de "?" (?uf=sp)
+    let sigla = request.query.uf //criando variável para receber a uf via query
     let capitalEstados = estadosCidades.getCapitalEstado(sigla) //criando variável para guardar o resultado da função e mandando a sigla
 
     //tratativa de erros
